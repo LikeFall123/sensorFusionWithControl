@@ -1,12 +1,21 @@
+motorParamsDD = Simulink.data.dictionary.open('motorParametersData.sldd');
+robotParamsDD = Simulink.data.dictionary.open('robotModelData.sldd');
+controlParamsDD = Simulink.data.dictionary.open('controlVariablesData.sldd');
+modelParamsDD = Simulink.data.dictionary.open('modelConfigData.sldd');
+sectMotor = getSection(motorParamsDD,'Design Data');
+sectRobot = getSection(robotParamsDD,'Design Data');
+sectControl = getSection(controlParamsDD,'Design Data');
+sectModel = getSection(modelParamsDD,'Design Data');
+
 % Robot and motor parameter initialization
-J = motorInertia;   % motor inertia
-Kt = motorTorque;  % motor torque constant
-M = massOfCart;    % mass of cart
-m = massOfPendulum;    % mass of pendulum
-l = lengthToPendulumCenterOfMass;    % length to pendulum center of mass
+J = getValue(getEntry(sectMotor,'motorInertia'));   % motor inertia
+Kt = getValue(getEntry(sectMotor,'motorTorque'));  % motor torque constant
+M = getValue(getEntry(sectRobot,'massOfCart'));    % mass of cart
+m = getValue(getEntry(sectRobot,'massOfPendulum'));    % mass of pendulum
+l = getValue(getEntry(sectRobot,'lengthToPendulumCenterOfMass'));    % length to pendulum center of mass
 g = 9.81;   % gravity
-I = inertiaOfPendulum;  % inertia of pendulum
-r = wheelRadius;   % 5 cm wheel radius
+I = getValue(getEntry(sectRobot,'inertiaOfPendulum'));  % inertia of pendulum
+r = getValue(getEntry(sectRobot,'wheelRadius'));   % 3 cm wheel radius
 
 % States are x, dx/dt, phi, dphi/dt
 % Outputs are x position and tilt angle
@@ -24,10 +33,18 @@ C_pend = [1 0 0 0;
           0 0 1 0];
 D_pend = zeros(2,1);
 
+% Discretize System - for the augmented system
+dt = getValue(getEntry(sectModel,'stateEstRate'));
+sysd = c2d(ss(A_pend, B_pend, C_pend, D_pend), dt);
+Ad_pend = sysd.A;
+Bd_pend = sysd.B;
+Cd_pend = sysd.C;
+Dd_pend = sysd.D;
+
 % LQR Controller - for the augmented system
-% Q_lqr = diag([1/0.02^2 1/0.1^2 1/(10*pi/180)^2 1/0.1^2]);
-% R_lqr = 1;                        
-[K_lqr, ~, ~] = dlqr(A_pend, B_pend, Q_lqr, R_lqr);
+Q_lqr = diag([1/0.2^2 1/0.1^2 1/(20*pi/180)^2 1/0.1^2]);
+R_lqr = 1;                        
+[K_lqr, ~, ~] = dlqr(Ad_pend, Bd_pend, Q_lqr, R_lqr);
 
 % Servo motor state: i, omega
 % R = 2.0;

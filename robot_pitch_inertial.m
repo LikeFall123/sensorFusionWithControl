@@ -1,4 +1,25 @@
-function [I_y_center,I_y_axle,M_tot,z_COM] = robot_pitch_inertial(a,b,t,H, m_plate, rrod, Lrod, m_rod, z_axle)
+m_wood = 0.132;
+m_battery = 0.103;
+m_reg = 0.01;
+m_ard = 0.01;
+m_stm = 0.117;
+
+m_top = m_wood+m_battery+m_reg+m_ard;
+m_bottom = m_wood+m_stm;
+m_plate = (m_top+m_bottom)/2;
+
+a = 0.164;
+b = 0.106;
+t = 0.007;
+H = 0.105 - 2*t;
+rrod = 0.003;
+Lrod = H;
+m_rod = 0.03; % 28-29g
+z_axle = -0.05;
+
+[I_y_center,I_y_axle,M_tot,z_COM] = robot_pitch_inertia(a,b,t,H, m_plate, rrod, Lrod, m_rod, z_axle)
+
+function [I_y_center,I_y_axle,M_tot,z_COM] = robot_pitch_inertia(a,b,t,H, m_plate, rrod, Lrod, m_rod, z_axle)
 % compute_body_inertia  Compute inertia about pitch axis (y) for two plates + 4 rods
 %
 % Inputs:
