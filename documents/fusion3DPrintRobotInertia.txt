@@ -1,0 +1,37 @@
+
+
+Bodies (1)
+Area	1.300E+05 mm^2
+Density	0.001 g / mm^3
+Mass	333.138 g
+Volume	2.582E+05 mm^3
+Physical Material	PVC, Unplasticized
+Appearance	Plastic - Matte (Gray)
+
+Bounding Box
+	Length 	 180.00 mm
+	Width 	 70.00 mm
+	Height 	 153.70 mm
+Center of Mass	0.058 mm, 0.005 mm, 58.431 mm
+
+Moment of Inertia at Center of Mass   (g mm^2)
+	Ixx = 9.384E+05
+	Ixy = 237.067
+	Ixz = 192.634
+	Iyx = 237.067
+	Iyy = 1.971E+06
+	Iyz = -27.663
+	Izx = 192.634
+	Izy = -27.663
+	Izz = 1.330E+06
+
+Moment of Inertia at Origin   (g mm^2)
+	Ixx = 2.076E+06
+	Ixy = 236.976
+	Ixz = -938.078
+	Iyx = 236.976
+	Iyy = 3.108E+06
+	Iyz = -119.279
+	Izx = -938.078
+	Izy = -119.279
+	Izz = 1.330E+06
